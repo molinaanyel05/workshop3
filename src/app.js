@@ -5,6 +5,7 @@ const port = 4000;
 
 //Routes
 const albumsRouter = require("./Routes/albumsRouter");
+const photosRouter = require("./Routes/PhotosRouter");
 connectdb();
 //Enable req.body
 app.use(express.json());
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", albumsRouter);
+app.use("/", photosRouter);
 
 app.listen(port, () => {
   console.log(`Listen on port ${port}`);
