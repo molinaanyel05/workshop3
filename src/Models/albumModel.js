@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const albumSchema = new mongoose.Schema({
-    tags: {type: Intl,required: true },
+    user: {type: Number, required: true },
     name: {type: String, required: true },
     description: {type: String, required: true },
-    creationdate: {type: String, required: true },
+    creationdate: {type: String, required: true }
 
 })
 

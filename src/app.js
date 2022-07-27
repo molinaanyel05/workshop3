@@ -4,8 +4,8 @@ const app = express();
 const port = 4000;
 
 //Routes
-// const employeesRouter = require("./routes/employees.router");
-// connectdb();
+const albumsRouter = require("./Routes/albumsRouter");
+connectdb();
 //Enable req.body
 app.use(express.json());
 
@@ -13,9 +13,7 @@ app.get("/", (req, res) => {
   res.send("Hello world from workshop");
 });
 
-app.use("/", () => {
-  res.send("hello");
-});
+app.use("/", albumsRouter);
 
 app.listen(port, () => {
   console.log(`Listen on port ${port}`);

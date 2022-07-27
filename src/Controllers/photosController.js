@@ -1,5 +1,5 @@
 const { ReasonPhrases, StatusCodes } = require("http-status-codes");
-const Photo= require("./../Models/photo.Model");
+const Photo= require("./../Models/photoModel");
 const e = require("express");
 const { default: mongoose } = require("mongoose");
 

@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
+
+const Album = require("./Models/albumModel");
+
 //usar usuario y contraseña creados y agregar el nombre de la BD despues de ".net/"
-const url ="mongodb+srv://user:haD3MC6290UQBDhz@cluster0.0oslmrk.mongodb.net/workshop2";
+const url ="mongodb+srv://user:haD3MC6290UQBDhz@cluster0.0oslmrk.mongodb.net/proyecto2";
 
 const connectdb = async()=>{
   try {
