@@ -13,7 +13,21 @@ exports.showAlbums = async (req, res) => {
   const nameParam = req.params.user;
 
   const foundAlbum = await Album.find({ user: nameParam });
-  console.log(foundAlbum);
+  if (foundAlbum) {
+    res.status(StatusCodes.OK).json({
+      message: ReasonPhrases.OK,
+      data: foundAlbum,
+    });
+  } else {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: ReasonPhrases.NOT_FOUND,
+    });
+  }
+};
+exports.getAlbumById = async (req, res) => {
+  const idAlbum = mongoose.Types.ObjectId(req.params.id);
+
+  const foundAlbum = await Album.findById(idAlbum);
   if (foundAlbum) {
     res.status(StatusCodes.OK).json({
       message: ReasonPhrases.OK,
@@ -28,19 +42,26 @@ exports.showAlbums = async (req, res) => {
 
 exports.deleteAlbum = async (req, res) => {
   const idu = mongoose.Types.ObjectId(req.params.id);
-  const foundAlbum = await Album.findByIdAndRemove(idu);
-  if (foundAlbum) {
-    res.status(StatusCodes.OK).json({
-      message: ReasonPhrases.OK,
-    });
+  if (idu) {
+    const foundAlbum = await Album.findByIdAndRemove(idu);
+    if (foundAlbum) {
+      res.status(StatusCodes.OK).json({
+        message: ReasonPhrases.OK,
+      });
+    } else {
+      res.status(StatusCodes.NOT_FOUND).json({
+        message: ReasonPhrases.NOT_FOUND,
+      });
+    }
   } else {
-    res.status(StatusCodes.NOT_FOUND).json({
-      message: ReasonPhrases.NOT_FOUND,
-    });
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: ReasonPhrases.BAD_REQUEST });
   }
 };
 
 exports.updateAlbum = async (req, res) => {
+  console.log(req.params.id);
   const idu = mongoose.Types.ObjectId(req.params.id);
   const newu = req.body;
   const options = { new: true };
