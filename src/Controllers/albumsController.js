@@ -11,7 +11,9 @@ exports.createAlbum = async (req, res) => {
 
 exports.showAlbums = async (req, res) => {
   const nameParam = req.params.user;
-  const foundAlbum = await Album.findOne({ user: nameParam });
+
+  const foundAlbum = await Album.find({ user: nameParam });
+  console.log(foundAlbum);
   if (foundAlbum) {
     res.status(StatusCodes.OK).json({
       message: ReasonPhrases.OK,
