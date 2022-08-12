@@ -4,6 +4,7 @@ const e = require("express");
 const { default: mongoose } = require("mongoose");
 
 exports.createPhoto = async (req, res) => {
+  console.log(req.body);
   const photo = new Photo(req.body);
   photo.save();
   res.status(StatusCodes.CREATED).json({ message: ReasonPhrases.CREATED });
@@ -38,7 +39,7 @@ exports.getPhotoByAlbumUser = async (req, res) => {
   const { album } = req.query;
   //const albumId = mongoose.Types.ObjectId(album);
   const photosList = await Photo.find({
-    album_id: mongoose.Types.ObjectId(album),
+    album_id: album,
   });
 
   return photosList

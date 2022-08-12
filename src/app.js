@@ -1,6 +1,7 @@
 const express = require("express");
 const connectdb = require("./mongoose");
 const app = express();
+var cors = require('cors')
 const port = 4000;
 
 //Routes
@@ -9,6 +10,7 @@ const photosRouter = require("./routes/PhotosRouter");
 const authRouter = require("./routes/authRouter");
 connectdb();
 //Enable req.body
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
