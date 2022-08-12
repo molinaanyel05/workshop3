@@ -1,4 +1,4 @@
-const { generarJWT } = require("../helpers/generar-jwt");
+const { generarJWT } = require("../helpers/generate-jwt");
 const { googleVerify } = require("../helpers/google-verify");
 
 exports.googleSignin = async (req, res = response) => {

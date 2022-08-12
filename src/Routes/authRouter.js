@@ -7,7 +7,7 @@ const { validateFields } = require("../middlewares/validate-fields");
 const router = Router();
 
 router.post(
-  "/google",
+  "auth/google",
   [check("id_token", "id_token is required").not().isEmpty(), validateFields],
   googleSignin
 );

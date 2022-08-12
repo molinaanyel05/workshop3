@@ -4,8 +4,9 @@ const app = express();
 const port = 4000;
 
 //Routes
-const albumsRouter = require("./Routes/albumsRouter");
-const photosRouter = require("./Routes/PhotosRouter");
+const albumsRouter = require("./routes/albumsRouter");
+const photosRouter = require("./routes/PhotosRouter");
+const authRouter = require("./routes/authRouter");
 connectdb();
 //Enable req.body
 app.use(express.json());
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 
 app.use("/", albumsRouter);
 app.use("/", photosRouter);
+app.use("/", authRouter);
 
 app.listen(port, () => {
   console.log(`Listen on port ${port}`);
