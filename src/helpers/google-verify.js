@@ -10,7 +10,6 @@ exports.googleVerify = async (idToken = "") => {
     //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
   });
 
-  const { name: nombre, picture: img, email: correo } = ticket.getPayload();
-
-  return { nombre, img, correo };
+  const { name, picture, email } = ticket.getPayload();
+  return { name, picture, email };
 };
