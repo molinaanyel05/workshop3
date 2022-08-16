@@ -4,9 +4,9 @@ const User = require("../models/userModel");
 require("dotenv").config({ path: ".env" });
 module.exports = async (req, res, next) => {
   const authHeader = req.get("Authorization");
-
   if (authHeader) {
     //Get token
+
     const token = authHeader.split(" ")[1];
     try {
       //Validate JWT
@@ -24,5 +24,5 @@ module.exports = async (req, res, next) => {
       return res.status(404).json({ msg: "Invalid Token" });
     }
   }
-  return next();
+  next();
 };
