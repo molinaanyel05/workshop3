@@ -24,6 +24,7 @@ exports.showAlbums = async (req, res) => {
     });
   }
 };
+
 exports.getAlbumById = async (req, res) => {
   const idAlbum = mongoose.Types.ObjectId(req.params.id);
 
@@ -32,6 +33,22 @@ exports.getAlbumById = async (req, res) => {
     res.status(StatusCodes.OK).json({
       message: ReasonPhrases.OK,
       data: foundAlbum,
+    });
+  } else {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: ReasonPhrases.NOT_FOUND,
+    });
+  }
+};
+
+exports.getAlbumByName = async (req, res) => {
+  const nameParam = req.params.user;
+  const title =req.params.title
+  const foundAlbum = await Album.find({ user: nameParam });
+  if (foundAlbum) {
+    res.status(StatusCodes.OK).json({
+      message: ReasonPhrases.OK,
+      data: foundAlbum.filter(album => album.name.toString().toLowerCase().includes(title.toString().toLowerCase()))
     });
   } else {
     res.status(StatusCodes.NOT_FOUND).json({
