@@ -4,21 +4,36 @@ const e = require("express");
 const { default: mongoose } = require("mongoose");
 
 exports.createPhoto = async (req, res) => {
-  console.log(req.body);
-  const photo = new Photo(req.body);
-  photo.save();
-  res.status(StatusCodes.CREATED).json({ message: ReasonPhrases.CREATED });
+  if (!req.user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: ReasonPhrases.UNAUTHORIZED });
+  }
+  try {
+    const photo = await new Photo(req.body);
+    photo.save();
+    return res
+      .status(StatusCodes.CREATED)
+      .json({ message: ReasonPhrases.CREATED });
+  } catch (error) {
+    console.log("as", error);
+  }
 };
 
 exports.deletePhoto = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: ReasonPhrases.UNAUTHORIZED });
+  }
   const idu = mongoose.Types.ObjectId(req.params.id);
   const foundPhoto = await Photo.findByIdAndRemove(idu);
   if (foundPhoto) {
-    res.status(StatusCodes.OK).json({
+    return res.status(StatusCodes.OK).json({
       message: ReasonPhrases.OK,
     });
   } else {
-    res.status(StatusCodes.NOT_FOUND).json({
+    return res.status(StatusCodes.NOT_FOUND).json({
       message: ReasonPhrases.NOT_FOUND,
     });
   }
@@ -41,10 +56,30 @@ exports.getPhotoByAlbumUser = async (req, res) => {
   const photosList = await Photo.find({
     album_id: album,
   });
-
   return photosList
     ? res.status(StatusCodes.OK).json({ photos: { photosList } })
     : res.status(StatusCodes.NOT_FOUND).json({
         message: ReasonPhrases.NOT_FOUND,
       });
+};
+
+exports.getPhotoByID = async (req, res) => {
+  const { id } = req.query;
+
+  if (!req.user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: ReasonPhrases.UNAUTHORIZED });
+  }
+
+  try {
+    const photo = await Photo.findById(id);
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: ReasonPhrases.OK, data: photo });
+  } catch (error) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ message: ReasonPhrases.NOT_FOUND });
+  }
 };
