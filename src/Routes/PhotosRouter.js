@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.get("/photo", photoController.getPhotoByAlbumUser);
 router.get("/photo/:id", auth, photoController.getPhotoByID);
+router.get("/photo/:album/:title",photoController.getPhotoByName);
+
 router.post(
   "/photo",
   auth,

@@ -4,13 +4,31 @@ const e = require("express");
 const { default: mongoose } = require("mongoose");
 
 
+
 exports.createAlbum = async (req, res) => {
-  const album = new Album(req.body);
-  album.save();
-  res.status(StatusCodes.CREATED).json({ message: ReasonPhrases.CREATED });
-};
+  if (!req.user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: ReasonPhrases.UNAUTHORIZED });
+  }
+  try {
+    const album = await new Album(req.body);
+    album.save();
+    return res
+      .status(StatusCodes.CREATED)
+      .json({ message: ReasonPhrases.CREATED });
+  } catch (error) {
+    console.log("as", error);
+  }
+
+}
 
 exports.showAlbums = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: ReasonPhrases.UNAUTHORIZED });
+  }
   const nameParam = req.params.user;
   const foundAlbum = await Album.find({ user: nameParam });
   if (foundAlbum) {
@@ -24,20 +42,27 @@ exports.showAlbums = async (req, res) => {
     });
   }
 };
-exports.getAlbumById = async (req, res) => {
-  const idAlbum = mongoose.Types.ObjectId(req.params.id);
 
-  const foundAlbum = await Album.findById(idAlbum);
-  if (foundAlbum) {
-    res.status(StatusCodes.OK).json({
-      message: ReasonPhrases.OK,
-      data: foundAlbum,
-    });
-  } else {
-    res.status(StatusCodes.NOT_FOUND).json({
-      message: ReasonPhrases.NOT_FOUND,
-    });
+exports.getAlbumById = async (req, res) => {
+  try {
+    const idAlbum = mongoose.Types.ObjectId(req.params.id);
+    const foundAlbum = await Album.findById(idAlbum);
+    if (foundAlbum) {
+      res.status(StatusCodes.OK).json({
+        message: ReasonPhrases.OK,
+        data: foundAlbum,
+      });
+    } else {
+      res.status(StatusCodes.NOT_FOUND).json({
+        message: ReasonPhrases.NOT_FOUND,
+      });
+    } 
+  } catch (error) {
+     return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ message: ReasonPhrases.NOT_FOUND });
   }
+  
 };
 
 exports.getAlbumByName = async (req, res) => {
@@ -58,6 +83,11 @@ exports.getAlbumByName = async (req, res) => {
 
 
 exports.deleteAlbum = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: ReasonPhrases.UNAUTHORIZED });
+  }
   const idu = mongoose.Types.ObjectId(req.params.id);
   const foundAlbum = await Album.findByIdAndRemove(idu);
   if (foundAlbum) {
@@ -71,8 +101,12 @@ exports.deleteAlbum = async (req, res) => {
   }
 };
 
-exports.updateAlbum = async (req, res) => {
-  console.log(req.params.id);
+exports.updateAlbum = async (req, res) => {;
+  if (!req.user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: ReasonPhrases.UNAUTHORIZED });
+  }
   const idu = mongoose.Types.ObjectId(req.params.id);
   const newu = req.body;
   const options = { new: true };
