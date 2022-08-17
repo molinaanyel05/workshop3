@@ -18,6 +18,7 @@ module.exports = async (req, res, next) => {
         email: userInfo.email,
         picture: userInfo.picture,
         status: userInfo.status,
+        id: userInfo.id,
       };
     } catch (error) {
       console.log(error);
