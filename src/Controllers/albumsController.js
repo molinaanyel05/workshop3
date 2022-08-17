@@ -40,6 +40,23 @@ exports.getAlbumById = async (req, res) => {
   }
 };
 
+exports.getAlbumByName = async (req, res) => {
+  const user= req.params.user;
+  const title= req.params.title;
+  const foundAlbum = await Album.find({user: user});
+  if (foundAlbum) {
+      res.status(StatusCodes.OK).json({
+      message: ReasonPhrases.OK,
+      data: foundAlbum.filter(album => album.name.toLowerCase().includes(title.toLowerCase()))
+    });
+  } else {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: ReasonPhrases.NOT_FOUND,
+    });
+  }
+};
+
+
 exports.deleteAlbum = async (req, res) => {
   const idu = mongoose.Types.ObjectId(req.params.id);
   if (idu) {
