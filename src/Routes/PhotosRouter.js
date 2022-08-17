@@ -6,7 +6,7 @@ const photoController = require("./../Controllers/photosController");
 const { check } = require("express-validator");
 const router = express.Router();
 
-router.get("/photo", photoController.getPhotoByAlbumUser);
+router.get("/photo", auth, photoController.getPhotoByAlbumUser);
 router.get("/photo/:id", auth, photoController.getPhotoByID);
 router.post(
   "/photo",

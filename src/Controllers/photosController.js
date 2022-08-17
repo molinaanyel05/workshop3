@@ -56,6 +56,11 @@ exports.updatePhoto = async (req, res) => {
 };
 
 exports.getPhotoByAlbumUser = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: ReasonPhrases.UNAUTHORIZED });
+  }
   const { album } = req.query;
   //const albumId = mongoose.Types.ObjectId(album);
   const photosList = await Photo.find({
@@ -69,13 +74,15 @@ exports.getPhotoByAlbumUser = async (req, res) => {
 };
 
 exports.getPhotoByName = async (req, res) => {
-  const user= req.params.user;
-  const title= req.params.title;
-  const foundAlbum = await Album.find({user: user});
+  const user = req.params.user;
+  const title = req.params.title;
+  const foundAlbum = await Album.find({ user: user });
   if (foundAlbum) {
-      res.status(StatusCodes.OK).json({
+    res.status(StatusCodes.OK).json({
       message: ReasonPhrases.OK,
-      data: foundAlbum.filter(album => album.name.toLowerCase().includes(title.toLowerCase()))
+      data: foundAlbum.filter((album) =>
+        album.name.toLowerCase().includes(title.toLowerCase())
+      ),
     });
   } else {
     res.status(StatusCodes.NOT_FOUND).json({
@@ -83,7 +90,6 @@ exports.getPhotoByName = async (req, res) => {
     });
   }
 };
-
 
 exports.getPhotoByID = async (req, res) => {
   const { id } = req.params;
