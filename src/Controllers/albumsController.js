@@ -3,6 +3,7 @@ const Album = require("./../Models/albumModel");
 const e = require("express");
 const { default: mongoose } = require("mongoose");
 
+
 exports.createAlbum = async (req, res) => {
   const album = new Album(req.body);
   album.save();
@@ -11,7 +12,6 @@ exports.createAlbum = async (req, res) => {
 
 exports.showAlbums = async (req, res) => {
   const nameParam = req.params.user;
-
   const foundAlbum = await Album.find({ user: nameParam });
   if (foundAlbum) {
     res.status(StatusCodes.OK).json({
@@ -59,21 +59,15 @@ exports.getAlbumByName = async (req, res) => {
 
 exports.deleteAlbum = async (req, res) => {
   const idu = mongoose.Types.ObjectId(req.params.id);
-  if (idu) {
-    const foundAlbum = await Album.findByIdAndRemove(idu);
-    if (foundAlbum) {
-      res.status(StatusCodes.OK).json({
-        message: ReasonPhrases.OK,
-      });
-    } else {
-      res.status(StatusCodes.NOT_FOUND).json({
-        message: ReasonPhrases.NOT_FOUND,
-      });
-    }
+  const foundAlbum = await Album.findByIdAndRemove(idu);
+  if (foundAlbum) {
+    return res.status(StatusCodes.OK).json({
+      message: ReasonPhrases.OK,
+    });
   } else {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: ReasonPhrases.BAD_REQUEST });
+    return res.status(StatusCodes.NOT_FOUND).json({
+      message: ReasonPhrases.NOT_FOUND,
+    });
   }
 };
 
