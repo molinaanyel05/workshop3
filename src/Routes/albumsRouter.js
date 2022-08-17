@@ -15,7 +15,6 @@ router.post(
   ],
   albumController.createAlbum
 );
-
 router.get("/albums/:user", auth, albumController.showAlbums);
 
 router.get("/album/:id", albumController.getAlbumById);

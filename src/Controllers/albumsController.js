@@ -24,11 +24,6 @@ exports.createAlbum = async (req, res) => {
 }
 
 exports.showAlbums = async (req, res) => {
-  if (!req.user) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: ReasonPhrases.UNAUTHORIZED });
-  }
   const nameParam = req.params.user;
   const foundAlbum = await Album.find({ user: nameParam });
   if (foundAlbum) {
@@ -44,7 +39,6 @@ exports.showAlbums = async (req, res) => {
 };
 
 exports.getAlbumById = async (req, res) => {
-  try {
     const idAlbum = mongoose.Types.ObjectId(req.params.id);
     const foundAlbum = await Album.findById(idAlbum);
     if (foundAlbum) {
@@ -57,12 +51,6 @@ exports.getAlbumById = async (req, res) => {
         message: ReasonPhrases.NOT_FOUND,
       });
     } 
-  } catch (error) {
-     return res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ message: ReasonPhrases.NOT_FOUND });
-  }
-  
 };
 
 exports.getAlbumByName = async (req, res) => {
