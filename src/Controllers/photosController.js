@@ -40,6 +40,11 @@ exports.deletePhoto = async (req, res) => {
 };
 
 exports.updatePhoto = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: ReasonPhrases.UNAUTHORIZED });
+  }
   const idu = mongoose.Types.ObjectId(req.params.id);
   const newu = req.body;
   const options = { new: true };
@@ -64,8 +69,7 @@ exports.getPhotoByAlbumUser = async (req, res) => {
 };
 
 exports.getPhotoByID = async (req, res) => {
-  const { id } = req.query;
-
+  const { id } = req.params;
   if (!req.user) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
