@@ -38,6 +38,7 @@ exports.googleSignin = async (req, res = response) => {
         email: user.email,
         picture: user.picture,
         status: user.status,
+        id: user.id,
       },
       token,
     });

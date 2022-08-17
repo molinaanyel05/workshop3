@@ -74,14 +74,25 @@ exports.getPhotoByAlbumUser = async (req, res) => {
 };
 
 exports.getPhotoByName = async (req, res) => {
-  const user = req.params.user;
+  // <<<<<<< HEAD
+  //   const user = req.params.user;
+  //   const title = req.params.title;
+  //   const foundAlbum = await Album.find({ user: user });
+  //   if (foundAlbum) {
+  //     res.status(StatusCodes.OK).json({
+  //       message: ReasonPhrases.OK,
+  //       data: foundAlbum.filter((album) =>
+  //         album.name.toLowerCase().includes(title.toLowerCase())
+  //       ),
+  // =======
+  const album = req.params.album;
   const title = req.params.title;
-  const foundAlbum = await Album.find({ user: user });
-  if (foundAlbum) {
+  const foundPhoto = await Photo.find({ album_id: album });
+  if (foundPhoto) {
     res.status(StatusCodes.OK).json({
       message: ReasonPhrases.OK,
-      data: foundAlbum.filter((album) =>
-        album.name.toLowerCase().includes(title.toLowerCase())
+      data: foundPhoto.filter((photo) =>
+        photo.name.toLowerCase().includes(title.toLowerCase())
       ),
     });
   } else {
@@ -98,7 +109,6 @@ exports.getPhotoByID = async (req, res) => {
       .status(StatusCodes.UNAUTHORIZED)
       .json({ message: ReasonPhrases.UNAUTHORIZED });
   }
-
   try {
     const photo = await Photo.findById(id);
     return res
